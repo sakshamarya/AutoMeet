@@ -17,6 +17,10 @@ app.get('/',(req,res)=>{
     res.sendFile(__dirname + '/index.html');
 });
 
+app.get('/index.js',(req,res)=>{
+    res.sendFile(__dirname + '/index.js');
+});
+
 const ip = process.env.IP || '0.0.0.0'; // For heroku deployment
 const PORT = process.env.PORT || 5000;
 
@@ -45,9 +49,10 @@ app.post('/clientData', (req,res)=>{
 
     // This handles all kinds of exceptions
     
-    process.on('uncaughtException', function(err) {
+    process.on('uncaughtException',function(err) {
     
         // Handle the error safely
+        browser.close();
         console.log(err)
     })
 
@@ -124,8 +129,10 @@ app.post('/clientData', (req,res)=>{
     
     
             var isLinkActive = false;
+            // Wait for link to active -> 20 minutes
+            var waitLimit = Date.now() + (20 * 60 * 1000);
     
-            while(isLinkActive == false)
+            while(isLinkActive == false && Date.now()<waitLimit)
             {
                 // Go to meet Link
                 await page.goto(meetLink);
@@ -165,6 +172,20 @@ app.post('/clientData', (req,res)=>{
                 }
             }
     
+                // wait for a selector (meet ID in bottom left) to appear on the screen so that it can be sure we have entered to meet
+                var isInsideMeet = 0;
+
+                while(isInsideMeet == 0)
+                {
+                    try {
+                        await page.waitForSelector('.CkXZgc');
+                        isInsideMeet=1;
+                        console.log('Entered meet');
+                    } catch (error) {
+                        isInsideMeet=0;
+                    }
+                }
+
                 // Wait for 5 seconds to load page
                 await page.waitForTimeout(5000);
     
@@ -237,6 +258,7 @@ app.post('/clientData', (req,res)=>{
                 await browser.close();
           })();
     } catch (error) {
+        browser.close();
         console.log(error);
     }
 
