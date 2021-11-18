@@ -48,20 +48,26 @@ app.post('/clientData', (req,res)=>{
 
             console.log('1');
 
-            const browser = await puppeteer.launch({
-              headless: false, // If we run this in default i.e. headless: true, the browser will open in the background
-              args: [ '--use-fake-ui-for-media-stream' , '--no-sandbox'],  //allows the user to skip a prompt of getUserMedia
-              executablePath: chromeLocation
-            });
-            const page = await browser.newPage();
-    
-            await page.waitForTimeout(time);
+            try {
+                const browser = await puppeteer.launch({
+                    headless: false, // If we run this in default i.e. headless: true, the browser will open in the background
+                    args: [ '--use-fake-ui-for-media-stream' , '--no-sandbox'],  //allows the user to skip a prompt of getUserMedia
+                    executablePath: chromeLocation
+                  });
+                  
+                  const page = await browser.newPage();
+          
+            } catch (error) {
+                console.log('unable to launch browser');            
+            }
+
+            console.log('2i')
     
             await page.goto('https://accounts.google.co.in');
           
             await page.type('#identifierId', emailId, { delay: 10 }); // Entering email id, delay for slow typing
             
-            console.log('2');
+            console.log('2ii');
           
             //we have to click and also we have to wait until the new page is loaded
           
@@ -106,6 +112,9 @@ app.post('/clientData', (req,res)=>{
               
             //Now, we are logged in, Go to google meet link
             console.log('Successful login');
+            
+            // wait for waiting time
+            await page.waitForTimeout(time);
 
             await page.waitForTimeout('10000');
               
