@@ -5,6 +5,9 @@ const app = express();
 const bodyParser = require('body-parser'); // used body parser since the data that is sent directly from post method of form is not parsed by default. The data is sent along with the body, that is why we use res.body.abcd..
 const { response } = require('express');
 const alert = require('alert');
+const chromePaths = require('chrome-paths'); // to get chrome path on the current system
+
+const chromeLocation = chromePaths.chrome;
 
 // stealth plugin -> when we run browser in headless mode, browser choose to serve different content on the webpageor no content at all. So, we use stealth plugin so that browser can run the same way it does in non headless mode.
 const StealthPlugin = require('puppeteer-extra-plugin-stealth');
@@ -46,6 +49,7 @@ app.post('/clientData', (req,res)=>{
             const browser = await puppeteer.launch({
               headless: false, // If we run this in default i.e. headless: true, the browser will open in the background
               args: [ '--use-fake-ui-for-media-stream' , '--no-sandbox'],  //allows the user to skip a prompt of getUserMedia
+              executablePath: chromeLocation
             });
             const page = await browser.newPage();
     
