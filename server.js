@@ -43,31 +43,30 @@ app.post('/clientData', (req,res)=>{
 
     console.log(emailId, meetLink, time);
 
+    // This handles all kinds of exceptions
+    
+    process.on('uncaughtException', function(err) {
+    
+        // Handle the error safely
+        console.log(err)
+    })
+
     try {
         (async () => {
-
-            console.log('1');
-
-            try {
-                const browser = await puppeteer.launch({
-                    headless: false, // If we run this in default i.e. headless: true, the browser will open in the background
-                    args: [ '--use-fake-ui-for-media-stream' , '--no-sandbox'],  //allows the user to skip a prompt of getUserMedia
-                    executablePath: chromeLocation
-                  });
-                  
-                  const page = await browser.newPage();
-          
-            } catch (error) {
-                console.log('unable to launch browser');            
-            }
-
-            console.log('2i')
+            
+            const browser = await puppeteer.launch({
+              headless: false, // If we run this in default i.e. headless: true, the browser will open in the background
+              args: [ '--use-fake-ui-for-media-stream' , '--no-sandbox'],  //allows the user to skip a prompt of getUserMedia
+              executablePath: chromeLocation
+            });
+            const page = await browser.newPage();
+    
+            await page.waitForTimeout(time);
     
             await page.goto('https://accounts.google.co.in');
           
             await page.type('#identifierId', emailId, { delay: 10 }); // Entering email id, delay for slow typing
             
-            console.log('2ii');
           
             //we have to click and also we have to wait until the new page is loaded
           
@@ -86,7 +85,6 @@ app.post('/clientData', (req,res)=>{
                 res.sendFile(__dirname + '/index.html');
                 return;
             }
-            console.log('3');
           
             await page.type('.whsOnd', password, {delay: 10});
           
@@ -107,14 +105,10 @@ app.post('/clientData', (req,res)=>{
                   res.sendFile(__dirname + '/index.html');
                   return;
               }
-              
-              console.log('4');
+          
               
             //Now, we are logged in, Go to google meet link
             console.log('Successful login');
-            
-            // wait for waiting time
-            await page.waitForTimeout(time);
 
             await page.waitForTimeout('10000');
               
@@ -128,7 +122,7 @@ app.post('/clientData', (req,res)=>{
                 return;
             }
     
-            console.log('5');
+    
             var isLinkActive = false;
     
             while(isLinkActive == false)
@@ -170,7 +164,6 @@ app.post('/clientData', (req,res)=>{
                     break;
                 }
             }
-            console.log('6');
     
                 // Wait for 5 seconds to load page
                 await page.waitForTimeout(5000);
@@ -186,8 +179,6 @@ app.post('/clientData', (req,res)=>{
                 await page.keyboard.up('AltLeft');
                 await page.keyboard.up('Control');
     
-                console.log('7');
-
                 const endTime = Date.now() + (joinTime * 60 * 1000);
     
                 let flag=0;
@@ -226,7 +217,7 @@ app.post('/clientData', (req,res)=>{
     
                 }
     
-                console.log('8');
+          
                 // await page.waitForTimeout((joinTime * 60 * 1000));
     
                 console.log('Ending Call');
@@ -239,8 +230,6 @@ app.post('/clientData', (req,res)=>{
                     // delay for extra 3 seconds so that it gets the time to switch to next page
                     await page.waitForTimeout(3000)
                 ]);
-
-                console.log('8');
             
                 await page.waitForTimeout(3000);
                 res.sendFile(__dirname + '/index.html')
