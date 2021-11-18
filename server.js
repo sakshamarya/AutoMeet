@@ -96,6 +96,9 @@ app.post('/clientData', (req,res)=>{
           
               
             //Now, we are logged in, Go to google meet link
+            console.log('Successful login');
+
+            await page.waitForTimeout('10000');
               
             try {
                 await page.goto(meetLink);
