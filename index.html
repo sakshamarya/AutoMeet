@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AutoMeet</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@300&display=swap" rel="stylesheet">
+    <style>
+
+        .modal-header{
+            height: 2rem;
+            border: solid black 1px;
+            width: 35%;
+            padding: 2%;
+            text-align: center;
+            font-size: 2rem;
+        }
+    
+        .modal-content{
+            border: black solid 1px;
+            /* height: 20rem; */
+            width: 35%;
+            padding: 2%;
+            font-family: 'Inconsolata', monospace;
+        }
+
+        
+
+        
+        input{
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            box-sizing: border-box;
+            border-radius: 4px;
+        }
+    
+        .submitBtn{
+            clear: right;
+            margin: 2% auto;
+            margin-bottom: 0;
+            font-size: 16px;
+            padding: 1% 2%;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    
+    
+    
+    </style>
+
+</head>
+
+<body>
+
+    <div class="modal-header">
+        AutoMeet
+    </div>
+    <div class="modal-content">
+
+        <form action="/clientData" method="POST">
+
+            <span>E-Mail <input type="text" name="email" id="emailInput" required> </span>
+            <span>Password <input type="password" name="password" id="passwordInput" required> </span>
+            <span>Meet Link <input type="text" name="meetLink" id="meetLink" required> </span>
+            <span>Meet Duration (in minutes) <input type="number" step="0.1" name="joinTime" id="joinTime" required> </span>
+            <span>Hours left for Meet to start <input type="number" step="0.001" name="time" id="timeInput"></span>
+            <span>Enter Trigger Text <span style="color: red;">(First character must be upper case. Ex. Good)</span> <input type="text" name="triggerText" id="triggerText"></span>
+            <span>Enter text to be sent (on Trigger) <input type="text" name="sendText" id="sendText"></span>
+            <button class="submitBtn" type="submit" onclick="changeStatus()">Schedule Meet</button>
+
+        </form>
+
+        
+        
+        <div class="warning">
+            <p style="color: red;">Make sure you have turned off the two step verification on your account</p>
+        </div>
+
+        <div class="status" style="padding: 2%;"></div>
+
+    </div>
+
+    <script>
+
+        function changeStatus()
+        {
+            let status = document.querySelector('.status');
+            status.innerHTML = 'App running ..';
+            status.style.backgroundColor = "green";
+        }
+
+    </script>
+
+</body>
+</html>
