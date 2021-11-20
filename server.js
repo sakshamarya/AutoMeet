@@ -59,7 +59,7 @@ app.post('/clientData', (req,res)=>{
         (async () => {
             
             const browser = await puppeteer.launch({
-            //   headless: false, // If we run this in default i.e. headless: true, the browser will open in the background
+              headless: false, // If we run this in default i.e. headless: true, the browser will open in the background
               args: [ '--use-fake-ui-for-media-stream' , '--no-sandbox'],  //allows the user to skip a prompt of getUserMedia
             //   executablePath: chromeLocation
             });
@@ -109,7 +109,29 @@ app.post('/clientData', (req,res)=>{
                   res.sendFile(__dirname + '/index.html');
                   return;
               }
-          
+
+              await page.waitForTimeout(3000);
+
+            //   Check for notification tap login method -> class = fD1Pid
+              console.log('Checking for one tap login number');
+
+              console.log('Waiting for 15 second to check for one tap number')
+
+              page.waitForSelector('.fD1Pid',{
+                timeout:15000
+              }).then(async ()=>{
+                    try {
+                        const element = await page.$('.fD1Pid');
+                        const oneTapNumber = page.evaluate(element=>element.textContent,element);
+                        alert('Press' + oneTapNumber+ 'on your mobile phone');
+                    } catch (error) {
+                        console.log('cannot get one time notification number');
+                    }
+              }).catch((err)=>{
+                  console.log(err);
+              });
+
+              await page.waitForTimeout(5000);
               
             //Now, we are logged in, Go to google meet link
             console.log('Successful login');
@@ -125,7 +147,7 @@ app.post('/clientData', (req,res)=>{
                 res.sendFile(__dirname + '/index.html');
                 return;
             }
-    
+            
     
             var isLinkActive = false;
             // Wait for link to active -> 20 minutes
