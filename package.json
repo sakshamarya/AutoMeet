@@ -12,11 +12,9 @@
   "dependencies": {
     "alert": "^5.0.10",
     "body-parser": "^1.19.0",
-    "chrome-paths": "^1.0.1",
     "express": "^4.17.1",
     "nodemon": "^2.0.15",
     "puppeteer": "^11.0.0",
-    "puppeteer-core": "^11.0.0",
     "puppeteer-extra": "^3.2.3",
     "puppeteer-extra-plugin-stealth": "^2.9.0"
   }
