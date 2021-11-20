@@ -59,7 +59,7 @@ app.post('/clientData', (req,res)=>{
         (async () => {
             
             const browser = await puppeteer.launch({
-              headless: false, // If we run this in default i.e. headless: true, the browser will open in the background
+            //   headless: false, // If we run this in default i.e. headless: true, the browser will open in the background
               args: [ '--use-fake-ui-for-media-stream' , '--no-sandbox'],  //allows the user to skip a prompt of getUserMedia
             //   executablePath: chromeLocation
             });
