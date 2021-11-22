@@ -83,10 +83,13 @@ app.post('/clientData', (req,res)=>{
                     await page.waitForTimeout(3000)
                 ]);
             } catch (error) {
-                console.log('invalid Email');
-                alert('Invalid Email!')
+                
+                // alert('Invalid Email!')
                 await browser.close();
-                res.sendFile(__dirname + '/index.html');
+                // res.sendFile(__dirname + '/index.html');
+                res.send('Invalid Email Address.');
+                console.log('invalid Email');
+                // app.post('/invalid-Email');
                 return;
             }
           
@@ -104,9 +107,11 @@ app.post('/clientData', (req,res)=>{
                 ]);
               } catch (error) {
                   console.log('Invalid Password');
-                  alert('Invalid Password');
+                //   alert('Invalid Password');
+                //   app.post('/invalid-Password')
                   await browser.close();
-                  res.sendFile(__dirname + '/index.html');
+                //   res.sendFile(__dirname + '/index.html');
+                res.send('Invalid Password.');
                   return;
               }
 
@@ -117,19 +122,22 @@ app.post('/clientData', (req,res)=>{
 
               console.log('Waiting for 15 second to check for one tap number')
 
-              page.waitForSelector('.fD1Pid',{
-                timeout:15000
-              }).then(async ()=>{
-                    try {
-                        const element = await page.$('.fD1Pid');
-                        const oneTapNumber = page.evaluate(element=>element.textContent,element);
-                        alert('Press' + oneTapNumber+ 'on your mobile phone');
-                    } catch (error) {
-                        console.log('cannot get one time notification number');
-                    }
-              }).catch((err)=>{
-                  console.log(err);
-              });
+              try {
+
+                await page.waitForSelector('.fD1Pid',{timeout:15000});
+                const element = await page.$('.fD1Pid');
+                const oneTapNumber = await page.evaluate(element=>element.textContent,element);
+
+                // alert('Press ' + oneTapNumber+  ' on your mobile phone. Waiting for 15 seconds');
+                res.write('Press ' + oneTapNumber+  ' on your mobile phone. Waiting for 15 seconds to tap on your mobile phone.');
+                console.log(oneTapNumber);
+
+                await page.waitForTimeout(15000);
+
+              } catch (error) {
+                  console.log('cannot get one time notification number');
+              }
+
 
               await page.waitForTimeout(5000);
               
@@ -142,9 +150,10 @@ app.post('/clientData', (req,res)=>{
                 await page.goto(meetLink);
             } catch (error) {
                 // Invalid meet link
-                alert('Invalid Meet Link');
+                // alert('Invalid Meet Link');
                 await browser.close();
-                res.sendFile(__dirname + '/index.html');
+                res.send('Invalid meet Link');
+                // res.sendFile(__dirname + '/index.html');
                 return;
             }
             
@@ -206,6 +215,8 @@ app.post('/clientData', (req,res)=>{
                         isInsideMeet=0;
                     }
                 }
+
+                res.write('Entered Meet');
 
                 // Wait for 5 seconds to load page
                 await page.waitForTimeout(5000);
