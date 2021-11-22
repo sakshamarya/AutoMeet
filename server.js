@@ -166,8 +166,8 @@ app.post('/clientData', (req,res)=>{
             
     
             var isLinkActive = false;
-            // Wait for link to active -> 20 minutes
-            var waitLimit = Date.now() + (20 * 60 * 1000);
+            // Wait for link to active -> 5 minutes
+            var waitLimit = Date.now() + (5 * 60 * 1000);
     
             while(isLinkActive == false && Date.now()<waitLimit)
             {
@@ -293,6 +293,7 @@ app.post('/clientData', (req,res)=>{
                 ]);
             
                 await page.waitForTimeout(3000);
+                res.send('Meet Ended');
                 // res.write('Meet Ended');
                 // res.end();
             
