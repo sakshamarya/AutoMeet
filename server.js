@@ -83,13 +83,16 @@ app.post('/clientData', (req,res)=>{
                     await page.waitForTimeout(3000)
                 ]);
             } catch (error) {
-                
+
+                res.write('Invalid Email Address.');
+                res.end();
+                console.log('invalid Email');
                 // alert('Invalid Email!')
                 await browser.close();
                 // res.sendFile(__dirname + '/index.html');
-                res.send('Invalid Email Address.');
-                console.log('invalid Email');
+                
                 // app.post('/invalid-Email');
+                
                 return;
             }
           
@@ -107,11 +110,13 @@ app.post('/clientData', (req,res)=>{
                 ]);
               } catch (error) {
                   console.log('Invalid Password');
+                  res.write('Invalid Password.');
+                  res.end();
                 //   alert('Invalid Password');
                 //   app.post('/invalid-Password')
                   await browser.close();
                 //   res.sendFile(__dirname + '/index.html');
-                res.send('Invalid Password.');
+                
                   return;
               }
 
@@ -129,7 +134,8 @@ app.post('/clientData', (req,res)=>{
                 const oneTapNumber = await page.evaluate(element=>element.textContent,element);
 
                 // alert('Press ' + oneTapNumber+  ' on your mobile phone. Waiting for 15 seconds');
-                res.write('Press ' + oneTapNumber+  ' on your mobile phone. Waiting for 15 seconds to tap on your mobile phone.');
+                res.write('Press ' + oneTapNumber+  ' on your mobile phone. Waiting for 15 seconds to tap on your mobile phone. After this, you will be logged in.');
+                res.end();
                 console.log(oneTapNumber);
 
                 await page.waitForTimeout(15000);
@@ -151,8 +157,9 @@ app.post('/clientData', (req,res)=>{
             } catch (error) {
                 // Invalid meet link
                 // alert('Invalid Meet Link');
+                // res.write('Invalid meet Link');
                 await browser.close();
-                res.send('Invalid meet Link');
+                
                 // res.sendFile(__dirname + '/index.html');
                 return;
             }
@@ -209,6 +216,7 @@ app.post('/clientData', (req,res)=>{
                 {
                     try {
                         await page.waitForSelector('.CkXZgc');
+                        // res.write('Entered Meet ->');
                         isInsideMeet=1;
                         console.log('Entered meet');
                     } catch (error) {
@@ -216,7 +224,7 @@ app.post('/clientData', (req,res)=>{
                     }
                 }
 
-                res.write('Entered Meet');
+                
 
                 // Wait for 5 seconds to load page
                 await page.waitForTimeout(5000);
@@ -285,7 +293,8 @@ app.post('/clientData', (req,res)=>{
                 ]);
             
                 await page.waitForTimeout(3000);
-                res.sendFile(__dirname + '/index.html')
+                // res.write('Meet Ended');
+                // res.end();
             
                 await browser.close();
           })();
