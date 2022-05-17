@@ -25,7 +25,7 @@ const ip = process.env.IP || '0.0.0.0'; // For heroku deployment
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT,ip,()=>{
-    console.log('server is listening on port 3000');
+    console.log('server is listening on port 5000');
 });
 
 app.use(bodyParser.urlencoded({
@@ -59,7 +59,7 @@ app.post('/clientData', (req,res)=>{
         (async () => {
             
             const browser = await puppeteer.launch({
-            //   headless: false, // If we run this in default i.e. headless: true, the browser will open in the background
+              headless: false, // If we run this in default i.e. headless: true, the browser will open in the background
               args: [ '--use-fake-ui-for-media-stream' , '--no-sandbox'],  //allows the user to skip a prompt of getUserMedia
             //   executablePath: chromeLocation
             });
@@ -125,11 +125,11 @@ app.post('/clientData', (req,res)=>{
             //   Check for notification tap login method -> class = fD1Pid
               console.log('Checking for one tap login number');
 
-              console.log('Waiting for 15 second to check for one tap number')
+              console.log('Waiting for 10 second to check for one tap number')
 
               try {
 
-                await page.waitForSelector('.fD1Pid',{timeout:15000});
+                await page.waitForSelector('.fD1Pid',{timeout:10000});
                 const element = await page.$('.fD1Pid');
                 const oneTapNumber = await page.evaluate(element=>element.textContent,element);
 
@@ -190,7 +190,8 @@ app.post('/clientData', (req,res)=>{
                     
                     // Clicking join button
                     await Promise.all([
-                        await page.click('.Y5sE8d', {clickCount: 1}),
+                        //  Y5sE8d
+                        await page.click('.QJgqC', {clickCount: 1}),
                         // delay for extra 3 seconds so that it gets the time to switch to next page
                         // alert('Meet Joined Successfully'),
                         // await page.waitForTimeout(3000),
@@ -215,7 +216,7 @@ app.post('/clientData', (req,res)=>{
                 while(isInsideMeet == 0)
                 {
                     try {
-                        await page.waitForSelector('.CkXZgc');
+                        await page.waitForSelector('.u6vdEc');
                         // res.write('Entered Meet ->');
                         isInsideMeet=1;
                         console.log('Entered meet');
@@ -227,7 +228,7 @@ app.post('/clientData', (req,res)=>{
                 
 
                 // Wait for 5 seconds to load page
-                await page.waitForTimeout(5000);
+                await page.waitForTimeout(3000);
     
                 // to turn on captions
                 await page.keyboard.press('c');
@@ -250,7 +251,7 @@ app.post('/clientData', (req,res)=>{
                     {
                         try {
                             //   CNusmb -> span element containing caption texts
-                            const element = await page.$$('.CNusmb');
+                            const element = await page.$$('.iTTPOb');
                             
                             for(let i=0;i<element.length;i++)
                             {
@@ -266,7 +267,7 @@ app.post('/clientData', (req,res)=>{
                                     flag=1; 
                                     
                                     // KHxj8b -> Enter text in comment box
-                                    await page.type('.KHxj8b', sendText, {delay: 0});
+                                    await page.type('.VfPpkd-fmcmS-wGMbrd', sendText, {delay: 0});
                                     await page.keyboard.press('Enter');
                                 }
                             }
