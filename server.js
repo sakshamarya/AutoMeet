@@ -76,14 +76,14 @@ app.post('/clientData', (req,res)=>{
           
             try {
                 await Promise.all([
-                    await page.click('.VfPpkd-LgbsSe', {clickCount: 1}),
+                    await page.click('.VfPpkd-LgbsSe-OWXEXe-k8QpJ', {clickCount: 1}),
                     page.waitForNavigation({waitUntil: 'networkidle0'}),
             
                     // delay for extra 3 seconds so that it gets the time to switch to next page
                     await page.waitForTimeout(3000)
                 ]);
             } catch (error) {
-
+                console.log(error);
                 res.write('Invalid Email Address.');
                 res.end();
                 console.log('invalid Email');
@@ -102,7 +102,7 @@ app.post('/clientData', (req,res)=>{
                //Clicking next button
               try {
                 await Promise.all([
-                    await page.click('.VfPpkd-LgbsSe', {clickCount: 1}),
+                    await page.click('.VfPpkd-LgbsSe-OWXEXe-k8QpJ', {clickCount: 1}),
                     page.waitForNavigation({waitUntil: 'networkidle0'}),
             
                     // delay for extra 3 seconds so that it gets the time to switch to next page
@@ -228,7 +228,9 @@ app.post('/clientData', (req,res)=>{
                 
 
                 // Wait for 5 seconds to load page
-                await page.waitForTimeout(3000);
+                // await page.waitForTimeout(3000);
+
+                await page.waitForSelector('.ouH3xe',{timeout:10000});
     
                 // to turn on captions
                 await page.keyboard.press('c');
